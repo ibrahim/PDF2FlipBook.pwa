@@ -4,6 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 import { Header, Menu, Form, FormField, TextInput, Button, Box, Grid } from "grommet";
 import styled from "styled-components";
 import { AppState } from "../../store";
+import Login from '../login/login'
 import NavBar from './nav-bar'
 
 interface FormState {
@@ -11,14 +12,19 @@ interface FormState {
   password: string | null;
 }
 
-export type ConnectedProps = {};
+export interface ConnectedProps { 
+  token: string | null;
+};
 
 export type Props = RouteComponentProps & ConnectedProps & DispatchProp;
 
-const mapStateToProps = (s: AppState): ConnectedProps => ({});
+const mapStateToProps = (state: AppState): ConnectedProps => ({
+  token: state.login.token
+});
 
 const Home = (props: Props) => {
-  const { dispatch } = props;
+  const { token, dispatch } = props
+  if(!token){ return(<Login />) }
   return (
       <Box direction="column" basis="full" fill>
         <NavBar/>

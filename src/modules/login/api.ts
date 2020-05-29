@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { LoginSubmitPayload }  from './types'
+import { LoginSubmitPayload, SignupFormState }  from './types'
 
 // const API_URL = 'https://us-central1-megalaonline.cloudfunctions.net/api'
 const API_URL = ''
@@ -17,4 +17,7 @@ export const authenticate = (userData: LoginSubmitPayload) => {
   return axios.post(`${API_URL}/login` , userData).then(res => res.data.token );
 }
 
+export const signup = (userData: SignupFormState) => {
+  return axios.post(`${API_URL}/signup` , userData).then(res => res.data.token );
+}
 

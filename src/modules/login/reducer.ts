@@ -1,12 +1,14 @@
 import { Reducer } from 'redux'
 import produce from 'immer'
 import {toast} from 'react-toastify'
-import { LoginState, LoginAction, LoginSuccessAction, LoginFailureAction } from './types'
+import { LoginState, LoginAction, LoginSuccessAction, LoginFailureAction, SignupFailureAction } from './types'
 import * as constants from './constants'
+
 
 const initialState: LoginState = {
   email: null,
-  token: null
+  token: null,
+  signup_errors: null
 }
 
 export const LoginReducer: Reducer<LoginState,LoginAction> = (
@@ -21,6 +23,11 @@ export const LoginReducer: Reducer<LoginState,LoginAction> = (
     case constants.LOGOUT_SUBMIT: {
       return produce(state, draft => {
         draft.token = null
+      })
+    }
+    case constants.SIGNUP_FAILURE: {
+      return produce(state, draft => {
+        draft.signup_errors = (action as SignupFailureAction).payload.errors
       })
     }
     case constants.LOGIN_FAILURE: {

@@ -4,33 +4,38 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter as Router } from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
+import { Grommet } from 'grommet';
 
 import App from './App';
 import configureStore from './store'
 import * as serviceWorker from './serviceWorker';
 
+import theme from './config/theme';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const { store, persistor } = configureStore() 
+
+const toastifyConfig = {
+  autoClose: 5000,
+  hideProgressBar: true,
+  newestOnTop: true,
+  closeOnClick: true,
+  rtl: false,
+  pauseOnFocusLoss: true,
+  pauseOnHover: true
+}
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
       <Router>
-        <App />
+        <Grommet theme={ theme } full>
+          <App />
+        </Grommet>
       </Router>
-      <ToastContainer
-      position="top-center"
-      autoClose={5000}
-      hideProgressBar={true}
-      newestOnTop={true}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      pauseOnHover
-      />
+  <ToastContainer {...toastifyConfig} />
       </PersistGate>
     </Provider>
   </React.StrictMode>,

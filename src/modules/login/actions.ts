@@ -5,9 +5,15 @@ import {
   LoginSuccessAction,
   LogoutSubmitAction,
   LoginFailureAction,
+  SignupSubmitAction,
+  SignupSuccessAction,
+  SignupFailureAction,
   LoginSuccessPayload,
   LoginFailurePayload,
-  LoginSubmitPayload
+  SignupSuccessPayload,
+  SignupFailurePayload,
+  LoginSubmitPayload,
+  SignupFormState
 } from "./types";
 
 export const loginSubmit = (payload: LoginSubmitPayload) : LoginSubmitAction => ({
@@ -21,6 +27,20 @@ export const loginFailure = (payload: LoginFailurePayload) : LoginFailureAction 
 
 export const loginSuccess = (payload: LoginSuccessPayload) : LoginSuccessAction => ({
   type: constants.LOGIN_SUCCESS,
+  payload
+})
+
+export const signupSubmit = (payload: SignupFormState) : SignupSubmitAction => ({
+  type: constants.SIGNUP_SUBMIT,
+  payload
+})
+
+export const signupSuccess = (payload: SignupSuccessPayload) : SignupSuccessAction => ({
+  type: constants.SIGNUP_SUCCESS,
+  payload
+})
+export const signupFailure = (payload: SignupFailurePayload) : SignupFailureAction => ({
+  type: constants.SIGNUP_FAILURE,
   payload
 })
 

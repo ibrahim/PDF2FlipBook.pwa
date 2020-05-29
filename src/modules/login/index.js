@@ -1,3 +1,4 @@
 
 import Login from './login'
-export default Login
+import Signup from './signup'
+export default { Login, Signup }

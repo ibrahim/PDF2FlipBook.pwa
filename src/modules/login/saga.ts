@@ -9,7 +9,7 @@ import * as Api from './api'
 export function* authorize(userData: LoginSubmitPayload) {
   try {
     const token = yield call(Api.authenticate, userData)
-    yield put(loginSuccess({token}))
+    yield put(loginSuccess({token, userInfo: null }))
     yield call(Api.storeToken, token )
     return token
   } catch(error) {

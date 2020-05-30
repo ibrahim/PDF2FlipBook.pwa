@@ -1,8 +1,12 @@
 import { Action, AnyAction } from 'redux'
 import * as constants from './constants'
+import * as firebase from 'firebase'
 
 export type LoginSubmitPayload = { email : string, password: string }
-export type LoginSuccessPayload = { token : string }
+export type LoginSuccessPayload = { 
+  token : string, 
+  userInfo: firebase.UserInfo | null 
+}
 export type LoginFailurePayload = { errors : string }
 export type SignupSuccessPayload = { token : string }
 export type SignupFailurePayload = { errors : SignupErrors }
@@ -48,29 +52,6 @@ export interface SignupFailureAction {
   payload: SignupFailurePayload
 }
 
-export interface AccountInfo {
-  localId: string;
-  email: string;
-  displayName: string;
-  photoUrl: string;
-  emailVerified: boolean;
-  passwordUpdatedAt: number;
-  providerUserInfo: [
-    {
-      providerId: string;
-      displayName: string;
-      photoUrl: string;
-      federatedId: number;
-      email: string;
-      rawId: number;
-    }
-  ];
-  validSince: string;
-  lastLoginAt: string;
-  createdAt: string;
-  lastRefreshAt: string;
-}
-
 export type SignupFields = 
   | "firstName" 
   | "lastName" 
@@ -87,7 +68,7 @@ export type SignupErrors = {
 export interface LoginState {
   email: string | null;
   token: string | null;
-  account: AccountInfo | null;
+  userInfo: firebase.UserInfo | null;
   signup_errors: SignupErrors | null;
 }
 

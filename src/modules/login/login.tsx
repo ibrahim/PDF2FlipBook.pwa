@@ -46,7 +46,7 @@ const Login = (props: Props) => {
         if (user) {
           console.log({user});
           user.getIdToken().then((idToken) => { 
-            dispatch(loginSuccess({ token: idToken }))
+            dispatch(loginSuccess({ token: idToken, userInfo: user.providerData[0] }))
             console.log(idToken); 
           }).catch((error) => {
             console.log("signin current user getToken fail",{error})

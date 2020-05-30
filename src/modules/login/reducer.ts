@@ -9,7 +9,7 @@ import * as constants from './constants'
 const initialState: LoginState = {
   email: null,
   token: null,
-  account: null,
+  userInfo: null,
   signup_errors: null
 }
 
@@ -20,7 +20,9 @@ export const LoginReducer: Reducer<LoginState,LoginAction> = (
   switch (action.type) {
     case constants.LOGIN_SUCCESS:
       return produce(state, draft => {
-        draft.token = `Bearer ${ (action as LoginSuccessAction).payload.token }`
+        const { token, userInfo } = (action as LoginSuccessAction).payload
+        draft.token = `Bearer ${ token }`
+        draft.userInfo = userInfo
       })
     case constants.LOGOUT_SUBMIT: {
       return produce(state, draft => {

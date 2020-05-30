@@ -1,10 +1,12 @@
 import React from "react";
 import { connect, DispatchProp } from "react-redux";
-import { RouteComponentProps } from "react-router-dom";
-import { Header, Menu, Form, FormField, TextInput, Button, Box, Grid } from "grommet";
+import { RouteComponentProps, Switch, Route } from "react-router-dom";
+import { Box } from "grommet";
 import styled from "styled-components";
 import { AppState } from "../../store";
 import Login from '../login/login'
+import Publications from './publications'
+import CreateForm from './publications/create-form'
 import NavBar from './nav-bar'
 
 interface FormState {
@@ -23,13 +25,17 @@ const mapStateToProps = (state: AppState): ConnectedProps => ({
 });
 
 const Home = (props: Props) => {
-  const { token, dispatch } = props
+  const { token } = props
   if(!token){ return(<Login />) }
   return (
       <Box direction="column" basis="full" fill>
         <NavBar/>
         <Box>
-            Hello App
+          <Switch>
+            <Route path="/app/publications/new" exact render={ (props: RouteComponentProps) => <CreateForm {...props}/> } />
+            <Route path="/app/publications" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
+            <Route path="/app" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
+          </Switch>
         </Box>
       </Box>
   );

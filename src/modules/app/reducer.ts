@@ -1,13 +1,24 @@
 import { Reducer } from 'redux'
-import { AppState, AppAction } from './types'
+import produce from 'immer'
+import * as constants from './constants'
+import { 
+  AppReducerState, 
+  AppAction,
+  GetPublicationsSuccessAction
+} from './types'
 
-const initialState: AppState = {
-  publications: [],
+const initialState: AppReducerState = {
+  publications: null,
   issues: {},
 }
 
-export const AppReducer: Reducer<AppState,AppAction> = (state: AppState = initialState, action: AppAction) => {
+export const AppReducer: Reducer<AppReducerState,AppAction> = (state: AppReducerState = initialState, action: AppAction) => {
   switch (action.type) {
+    case constants.GET_PUBLICATIONS_SUCCESS:{
+      return produce(state, (draft) => {
+        draft.publications = (action as GetPublicationsSuccessAction).payload.publications
+      })
+    }
     default: {
       return state
     }

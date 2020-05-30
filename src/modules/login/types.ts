@@ -48,6 +48,29 @@ export interface SignupFailureAction {
   payload: SignupFailurePayload
 }
 
+export interface AccountInfo {
+  localId: string;
+  email: string;
+  displayName: string;
+  photoUrl: string;
+  emailVerified: boolean;
+  passwordUpdatedAt: number;
+  providerUserInfo: [
+    {
+      providerId: string;
+      displayName: string;
+      photoUrl: string;
+      federatedId: number;
+      email: string;
+      rawId: number;
+    }
+  ];
+  validSince: string;
+  lastLoginAt: string;
+  createdAt: string;
+  lastRefreshAt: string;
+}
+
 export type SignupFields = 
   | "firstName" 
   | "lastName" 
@@ -64,6 +87,7 @@ export type SignupErrors = {
 export interface LoginState {
   email: string | null;
   token: string | null;
+  account: AccountInfo | null;
   signup_errors: SignupErrors | null;
 }
 

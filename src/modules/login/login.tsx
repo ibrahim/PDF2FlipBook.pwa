@@ -1,19 +1,15 @@
 import React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { withRouter, RouteComponentProps, Link } from "react-router-dom";
-import { Form, FormField, TextInput, Button, Box } from "grommet";
+import * as firebase from 'firebase/app'
+import "firebase/auth";
+import { Form, TextInput, Button, Box } from "grommet";
 import styled from "styled-components";
 import { FiUser,FiLock } from 'react-icons/fi'
 import { FaFacebookSquare, FaGoogle} from 'react-icons/fa'
-import { loginSubmit } from "./actions";
+import { loginSubmit, loginSuccess } from "./actions";
 import { AppState } from "../../store";
-import * as firebase from 'firebase/app'
-import "firebase/auth";
-import { loginSuccess } from './actions'
-import config from "../../config/firebase"
 
-
-firebase.initializeApp(config);
 
 interface FormState {
   email: string | null;
@@ -38,30 +34,40 @@ const facebook_signin = () => {
   firebase.auth().signInWithRedirect(provider);
 } 
 
+
 const Login = (props: Props) => {
-  const { dispatch, history } = props;
+  const { dispatch } = props;
   const [value, setValue] = React.useState({});
-  
+  const [hasAuthResult, gotAuthResult] = React.useState(false) 
+
+  React.useEffect(() => {
+    if(hasAuthResult) {
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          console.log({user});
+          user.getIdToken().then((idToken) => { 
+            dispatch(loginSuccess({ token: idToken }))
+            console.log(idToken); 
+          }).catch((error) => {
+            console.log("signin current user getToken fail",{error})
+          })
+        }
+      });
+    }
+  },[hasAuthResult])
 
   React.useEffect(() => {
     console.log("UseEffect check google redirect callback")
     firebase.auth().getRedirectResult().then(function(result) {
-      if (result && result.credential) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const token = (result as any).credential.accessToken;
-        dispatch(loginSuccess({ token }))
-      }
-      // The signed-in user info.
-      const user = result.user;
-      console.log("Result Credential", { result })
+      gotAuthResult(true)
+      //console.log("Result Credential", { result })
     }).catch(function(error) {
-      // Handle Errors here.
-      const errorCode = error.code;
-      const errorMessage = error.message;
+      // const errorCode = error.code;
+      // const errorMessage = error.message;
       // The email of the user's account used.
-      const email = error.email;
+      // const email = error.email;
       // The firebase.auth.AuthCredential type that was used.
-      const credential = error.credential;
+      //const credential = error.credential;
       // ...
     });
   },[])

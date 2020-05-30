@@ -5,9 +5,11 @@ import { LoginState, LoginAction, LoginSuccessAction, LoginFailureAction, Signup
 import * as constants from './constants'
 
 
+// 'Bearer ya29.a0AfH6SMBICmVUrqe…q_D-H7Eap'
 const initialState: LoginState = {
   email: null,
   token: null,
+  account: null,
   signup_errors: null
 }
 
@@ -18,7 +20,7 @@ export const LoginReducer: Reducer<LoginState,LoginAction> = (
   switch (action.type) {
     case constants.LOGIN_SUCCESS:
       return produce(state, draft => {
-        draft.token = (action as LoginSuccessAction).payload.token
+        draft.token = `Bearer ${ (action as LoginSuccessAction).payload.token }`
       })
     case constants.LOGOUT_SUBMIT: {
       return produce(state, draft => {

@@ -1,26 +1,14 @@
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 import createSagaMiddleware from 'redux-saga'
 import { persistStore, persistReducer } from 'redux-persist'
-// import { AppAction } from '../modules/app/types'
-// import { LoginAction } from '../modules/login/types'
-import * as LoginActions from '../modules/login/actions'
 import { AppReducer } from '../modules/app/reducer'
 import { LoginReducer } from '../modules/login/reducer'
 import { rootSaga } from './root-saga'
 import localForage from 'localforage';
-// import rootEpic from './epics'
 
-// type AppActions = LoginAction | AppAction
 
-// const AccountName = localStorage.getItem("name")
-// const token = window.localStorage.getItem("token")
-// const epicMiddleware = createEpicMiddleware({
-//    dependencies: { token, AccountName }
-// });
-//const middleware = [ reduxThunk as ThunkMiddleware<AppState,AppActions>]; // , epicMiddleware ];
-//
 const sagaMiddleware = createSagaMiddleware()
-const middleware = [ sagaMiddleware ]; // , epicMiddleware ];
+const middleware = [ sagaMiddleware ];
 
 const persistConfig = {
   key: 'root',

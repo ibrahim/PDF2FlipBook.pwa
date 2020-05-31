@@ -23,7 +23,7 @@ const appConfig = {
 const loginConfig = {
   key: 'login',
   storage: localForage,
-  whitelist: ['email','token']
+  whitelist: ['email','token','userInfo']
 }
 const reducers = combineReducers({
   login: persistReducer(loginConfig, LoginReducer),

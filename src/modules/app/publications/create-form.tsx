@@ -59,7 +59,8 @@ export const Container = styled.div`
   display: flex;
   flex-grow: 1;
   flex-flow: column;
-  min-height: 100vh;
+  flex-grow:1;
+  align-self:center;
   align-items: center;
   justify-content: center;
 `;

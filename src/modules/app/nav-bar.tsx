@@ -1,21 +1,43 @@
 import React from 'react';
 import {connect, DispatchProp} from 'react-redux'
-import { Header, Heading, Button, Menu, Box } from 'grommet'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
+import { Header, Text, Heading, Button, Menu, Box, Avatar } from 'grommet'
 import { TiHome } from 'react-icons/ti'
 import { logoutSubmit } from '../login/actions'
 import { AuthSignOut } from '../login/helpers'
+import { AppState} from '../../store'
+import * as firebase from 'firebase'
 
-const NavBar = (props: DispatchProp) => {
-  const { dispatch } = props
+export interface ConnectedProps { 
+  userInfo: firebase.UserInfo | null;
+};
+
+export type Props = RouteComponentProps & ConnectedProps & DispatchProp;
+
+const mapStateToProps = (state: AppState): ConnectedProps => ({
+  userInfo: state.login.userInfo
+});
+const NavBar = (props: Props) => {
+  const { dispatch, userInfo } = props
   return(
     <Header background="brand">
       <Box direction="row" align="center">
         <Button icon={<TiHome />} hoverIndicator />
-        <Heading level="3" margin="none">Magala Online</Heading>
+        <Text size="medium" margin="none">Magala Online</Text>
       </Box>
-    <Menu label="account" items={[{ label: 'logout', onClick: () => AuthSignOut(dispatch) }]} />
+      <Menu label={ <UserAvatar info={ userInfo }/>} items={[{ label: 'logout', onClick: () => AuthSignOut(dispatch) }]} />
     </Header>
   )
 }
 
-export default connect()(NavBar)
+const UserAvatar = ({info} : { info: firebase.UserInfo | null}) => {
+  if(!info) return(<div>Menu</div>);
+  const { photoURL, displayName } = info
+  return(
+    <Box direction="row" align="center" alignContent="center">
+      {photoURL && <Avatar margin="small" size="small" src={ photoURL }/> }
+      <Text size="small">{ displayName }</Text>
+    </Box>
+  )
+}
+export default withRouter(connect(mapStateToProps)(NavBar))

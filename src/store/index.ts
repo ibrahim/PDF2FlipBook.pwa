@@ -65,6 +65,7 @@ const configureStore = () => {
   return { store, persistor }
 }
 
+export const { store, persistor } = configureStore() 
 export type AppState  = ReturnType<typeof reducers>
-export default configureStore
+export default { store, persistor }
 

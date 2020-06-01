@@ -68,6 +68,7 @@ export type SignupErrors = {
 export interface LoginState {
   email: string | null;
   token: string | null;
+  token_refreshed_at: number | null;
   userInfo: firebase.UserInfo | null;
   signup_errors: SignupErrors | null;
 }

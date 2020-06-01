@@ -10,6 +10,7 @@ const initialState: LoginState = {
   email: null,
   token: null,
   userInfo: null,
+  token_refreshed_at: null,
   signup_errors: null
 }
 
@@ -22,6 +23,7 @@ export const LoginReducer: Reducer<LoginState,LoginAction> = (
       return produce(state, draft => {
         const { token, userInfo } = (action as LoginSuccessAction).payload
         draft.token = `Bearer ${ token }`
+        draft.token_refreshed_at = new Date().getTime()
         draft.userInfo = userInfo
       })
     case constants.LOGOUT_SUBMIT: {

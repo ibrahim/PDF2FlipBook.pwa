@@ -1,5 +1,4 @@
 import React from 'react';
-import * as firebase from 'firebase/app'
 import { DispatchProp } from 'react-redux'
 import {connect} from 'react-redux'
 import { Switch, Route, RouteComponentProps } from "react-router-dom"
@@ -8,10 +7,8 @@ import Signup  from './modules/login/signup'
 import Home from './modules/app'
 import {AppState} from './store'
 import PageNotFound from './modules/app/page-not-found'
-import config from "./config/firebase"
 import './App.css';
 
-firebase.initializeApp(config);
 
 export interface ConnectedProps { 
 };

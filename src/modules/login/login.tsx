@@ -44,7 +44,7 @@ const Login = (props: Props) => {
     if(hasAuthResult) {
       firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-          console.log({user});
+          // console.log({user});
           user.getIdToken().then((idToken) => { 
             dispatch(loginSuccess({ token: idToken, userInfo: user.providerData[0] }))
             console.log(idToken); 

@@ -4,27 +4,29 @@ import { Provider } from 'react-redux'
 import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter as Router } from "react-router-dom"
 import { ToastContainer } from 'react-toastify';
+import { store, persistor} from './store'
 import { Grommet } from 'grommet';
 
+import "./modules/login/firebase-auth-init"
+
 import App from './App';
-import configureStore from './store'
 import * as serviceWorker from './serviceWorker';
 
 import theme from './config/theme';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-const { store, persistor } = configureStore() 
 
-const toastifyConfig = {
-  autoClose: 5000,
-  hideProgressBar: true,
-  newestOnTop: true,
-  closeOnClick: true,
-  rtl: false,
-  pauseOnFocusLoss: true,
-  pauseOnHover: true
-}
+//   <ToastContainer {...toastifyConfig} />
+// const toastifyConfig = {
+//   position: 'top-center',
+//   autoClose: 5000,
+//   hideProgressBar: true,
+//   closeOnClick: true,
+//   pauseOnHover: true,
+//   draggable: true,
+//   progress: undefined,
+// }
 
 ReactDOM.render(
   <React.StrictMode>
@@ -35,7 +37,17 @@ ReactDOM.render(
           <App />
         </Grommet>
       </Router>
-  <ToastContainer {...toastifyConfig} />
+<ToastContainer
+position="top-center"
+autoClose={5000}
+hideProgressBar
+newestOnTop
+closeOnClick
+rtl={false}
+pauseOnFocusLoss
+draggable
+pauseOnHover
+/>
       </PersistGate>
     </Provider>
   </React.StrictMode>,

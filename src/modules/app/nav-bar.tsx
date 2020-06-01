@@ -18,11 +18,12 @@ const mapStateToProps = (state: AppState): ConnectedProps => ({
   userInfo: state.login.userInfo
 });
 const NavBar = (props: Props) => {
-  const { dispatch, userInfo } = props
+  const { dispatch, history, userInfo } = props
+  const go_home = () => history.push('/app')
   return(
     <Header background="brand">
       <Box direction="row" align="center">
-        <Button icon={<TiHome />} hoverIndicator />
+        <Button icon={<TiHome onClick={ go_home } />} hoverIndicator />
         <Text size="medium" margin="none">Magala Online</Text>
       </Box>
       <Menu label={ <UserAvatar info={ userInfo }/>} items={[{ label: 'logout', onClick: () => AuthSignOut(dispatch) }]} />

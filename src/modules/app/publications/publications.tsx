@@ -1,17 +1,17 @@
 import React from "react";
 import { connect, DispatchProp } from "react-redux";
 import { withRouter, RouteComponentProps, Link } from "react-router-dom";
-import { FaPlus } from 'react-icons/fa'
+import { FaPlus, FaChevronRight } from 'react-icons/fa'
 import { Heading, Text, Form, TextInput, Button, Box } from "grommet";
 import styled from "styled-components";
 import { getPublicationsRequest } from "../actions";
-import { Publication } from "../types";
+import { IPublication, IPublications } from "../types";
 import { AppState } from '../../../store'
 
 
 
 export type ConnectedProps = {
-  publications: Publication[] | null
+  publications: IPublications | null
 };
 
 export type Props = RouteComponentProps & ConnectedProps & DispatchProp;
@@ -24,7 +24,8 @@ const Publications = (props: Props) => {
   const { dispatch, history, publications } = props;
 
   const not_loaded = publications === null
-  const has_publications = Array.isArray(publications)
+  const publications_keys = publications && Object.keys(publications)
+  const has_publications = Array.isArray(publications_keys) && publications_keys.length > 0
   React.useEffect(() => {
     if(not_loaded){
       dispatch(getPublicationsRequest({}))
@@ -45,21 +46,32 @@ const Publications = (props: Props) => {
           />
         </Box>
         <Box gap="medium">
-          { publications && has_publications && publications.map((publication) => {
-            return(<PublicationCard publication={publication} />)
+          { publications && has_publications && Object.keys(publications).map((k) => {
+            return(<PublicationCard publication={ publications[k] } />)
           })}
+    { !has_publications && <div>No Publications</div>}
         </Box>
       </Box>
   );
 };
 
-const PublicationCard = ({publication} : { publication: Publication }) => {
+const PublicationCard = ({publication} : { publication: IPublication }) => {
   const {id, name, title, created_at} = publication
   return(
-    <Box border={{ color: 'border', size: 'small'}} pad="medium">
-      <Text color="neutral-1">{ name }</Text>
-      <Heading level={ 3 } margin="xsmall">{ title }</Heading>
-    </Box>
+    <Link to={`/app/publications/${id}`}>
+      <Box 
+        direction="row" 
+        border={{ color: 'border', size: 'small'}} 
+        pad="medium" 
+        align="center" 
+        alignContent="between">
+        <Box direction="column" fill>
+          <Text color="neutral-1">{ name }</Text>
+          <Heading level={ 3 } margin="xsmall">{ title }</Heading>
+        </Box>
+        <FaChevronRight/>
+      </Box>
+    </Link>
   )
 }
 export const Container = styled.div`

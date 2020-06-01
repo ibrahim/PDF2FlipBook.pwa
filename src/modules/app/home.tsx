@@ -6,7 +6,10 @@ import styled from "styled-components";
 import { AppState } from "../../store";
 import Login from '../login/login'
 import Publications from './publications'
-import CreateForm from './publications/create-form'
+import Issues from './issues/issues'
+import CreatePublication from './publications/create-form'
+import CreateIssue from './issues/create'
+import EditIssue from './issues/edit'
 import NavBar from './nav-bar'
 
 interface FormState {
@@ -32,8 +35,11 @@ const Home = (props: Props) => {
         <NavBar/>
         <Box>
           <Switch>
-            <Route path="/app/publications/new" exact render={ (props: RouteComponentProps) => <CreateForm {...props}/> } />
+            <Route path="/app/publications/new" exact render={ (props: RouteComponentProps) => <CreatePublication {...props}/> } />
             <Route path="/app/publications" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
+            <Route path="/app/publications/:publication_id/new" exact render={ (props: RouteComponentProps) => <CreateIssue {...props} /> } />
+            <Route path="/app/publications/:publication_id/issues/:id" exact render={ (props: RouteComponentProps) => <EditIssue {...props} /> } />
+            <Route path="/app/publications/:publication_id" exact render={ (props: RouteComponentProps) => <Issues {...props} /> } />
             <Route path="/app" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
           </Switch>
         </Box>
@@ -41,13 +47,4 @@ const Home = (props: Props) => {
   );
 };
 
-export const Container = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  justify-content: center;
-`;
-export const Field = styled.div`
-  margin: 30px 0px;
-`;
 export default connect(mapStateToProps)(Home);

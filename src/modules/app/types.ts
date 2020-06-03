@@ -78,7 +78,7 @@ export interface GetPublicationSuccessAction {
 //}}}
 //{{{ Get Issue Actions
 export type GetIssueRequestPayload = { id : string, publication_id: string }
-export type GetIssueSuccessPayload = { issue: IIssue }
+export type GetIssueSuccessPayload = { issue: IIssue, publication_id: string }
 export type GetIssueFailurePayload = { errors: string[] }
 
 export interface GetIssueRequestAction {
@@ -156,6 +156,31 @@ export interface UpdateIssueSuccessAction {
   payload: UpdateIssueSuccessPayload;
 }
 //}}}
+//{{{ Upload Issue Actions
+export type UploadIssueRequestPayload = { 
+  issue_id: string, 
+  file : File, 
+  publication_id : string, 
+  callback: (progressEvent: { loaded: number; total: number; }) => void 
+}
+export type UploadIssueSuccessPayload = { issue : IIssue, publication_id : string }
+export type UploadIssueFailurePayload = { errors: string[] }
+
+export interface UploadIssueRequestAction {
+  type: typeof constants.UPLOAD_ISSUE_REQUEST;
+  payload: UploadIssueRequestPayload;
+}
+
+export interface UploadIssueFailureAction {
+  type: typeof constants.UPLOAD_ISSUE_FAILURE;
+  payload: UploadIssueFailurePayload;
+}
+
+export interface UploadIssueSuccessAction {
+  type: typeof constants.UPLOAD_ISSUE_SUCCESS;
+  payload: UploadIssueSuccessPayload;
+}
+//}}}
 
 export type AppAction = 
   | GetPublicationRequestAction
@@ -176,6 +201,9 @@ export type AppAction =
   | UpdateIssueRequestAction
   | UpdateIssueSuccessAction
   | UpdateIssueFailureAction
+  | UploadIssueRequestAction
+  | UploadIssueSuccessAction
+  | UploadIssueFailureAction
 
 
 export type ActionPayload = 
@@ -197,4 +225,7 @@ export type ActionPayload =
   | UpdateIssueRequestPayload 
   | UpdateIssueFailurePayload
   | UpdateIssueSuccessPayload
+  | UploadIssueRequestPayload 
+  | UploadIssueFailurePayload
+  | UploadIssueSuccessPayload
 

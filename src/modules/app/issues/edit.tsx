@@ -5,13 +5,15 @@ import { Form, FormField, Text, Select, TextInput, Button, Box } from "grommet";
 import styled from "styled-components";
 import Joi from '@hapi/joi';
 import { FiUser,FiLock } from 'react-icons/fi'
-import Breadcrumb from './breadcrumb'
-import { getPublicationsRequest, getIssuesRequest, updateIssueRequest } from '../actions'
+import { getPublicationsRequest, getIssuesRequest, getIssueRequest, updateIssueRequest } from '../actions'
 import { IIssue, IPublication } from '../types'
 import { MonthNames } from '../../../utils/month-names'
 import { AppState } from "../../../store";
 import * as Selectors from '../selectors'
 import { editIssueSchema } from '../schemas'
+
+import Breadcrumb from './breadcrumb'
+import Upload from './upload'
 
 
 export type ConnectedProps = {
@@ -27,14 +29,19 @@ const mapStateToProps = (state: AppState, props: RouteComponentProps): Connected
 });
 
 
-
-const CreateIssue = (props: Props) => {
+const EditIssue = (props: Props) => {
   const { dispatch, match, issue, publication } = props;
   const { id, publication_id } = (match.params as {publication_id: string, id: string} )
 
   const [value, setValue] = React.useState<IIssue|null>();
   const [validationResult, setValidationResult] = React.useState<Joi.ValidationResult | null>(null);
   
+  const [gotIssue, setGotIssue] = React.useState<IIssue|null>()
+  
+  React.useEffect(() => {
+    if(!gotIssue) dispatch(getIssueRequest({id, publication_id}))
+  },[gotIssue])
+
   React.useEffect(() => {
     if(!publication) dispatch(getPublicationsRequest({id, publication_id}))
   },[publication])
@@ -57,6 +64,7 @@ const CreateIssue = (props: Props) => {
     if(err.context.key === field) return err.message.replace("_"," ");
   }
   console.log({issue})
+  console.log({gotIssue})
   return (
     <Box direction="column" fill className="edit-issue" align="center" alignContent="start">
       <Breadcrumb issue={issue} publication={publication} />
@@ -118,6 +126,9 @@ const CreateIssue = (props: Props) => {
               name="date_year" />
           </FormField>
         </Field>
+        <Field>
+          <Upload issue_id={ id } publication_id={ publication_id }/>
+        </Field>
         <Box direction="column" gap="small" align="center">
           <Button type="submit" color="focus" primary label="Save Changes" fill />
           <Link to={`/app/publications/${ publication_id}`}>Cancel</Link>
@@ -130,4 +141,4 @@ const CreateIssue = (props: Props) => {
 export const Field = styled.div`
   margin: 30px 0px;
 `;
-export default withRouter(connect(mapStateToProps)(CreateIssue));
+export default withRouter(connect(mapStateToProps)(EditIssue));

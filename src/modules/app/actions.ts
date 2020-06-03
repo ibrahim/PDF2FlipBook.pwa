@@ -18,6 +18,9 @@ import {
   UpdateIssueRequestAction,
   UpdateIssueSuccessAction,
   UpdateIssueFailureAction,
+  UploadIssueRequestAction,
+  UploadIssueSuccessAction,
+  UploadIssueFailureAction,
   GetPublicationRequestPayload,
   GetPublicationSuccessPayload,
   GetPublicationFailurePayload,
@@ -36,6 +39,9 @@ import {
   UpdateIssueRequestPayload,
   UpdateIssueSuccessPayload,
   UpdateIssueFailurePayload,
+  UploadIssueRequestPayload,
+  UploadIssueSuccessPayload,
+  UploadIssueFailurePayload,
 } from './types'
 
 //{{{ get Publication Actions
@@ -119,6 +125,20 @@ export const updateIssueSuccess = (payload: UpdateIssueSuccessPayload) : UpdateI
 })
 export const updateIssueFailure = (payload: UpdateIssueFailurePayload) : UpdateIssueFailureAction => ({
   type: constants.UPDATE_ISSUE_FAILURE,
+  payload
+})
+//}}}
+//{{{ upload Issue Actions
+export const uploadIssueRequest = (payload: UploadIssueRequestPayload) : UploadIssueRequestAction => ({
+  type: constants.UPLOAD_ISSUE_REQUEST,
+  payload
+})
+export const uploadIssueSuccess = (payload: UploadIssueSuccessPayload) : UploadIssueSuccessAction => ({
+  type: constants.UPLOAD_ISSUE_SUCCESS,
+  payload
+})
+export const uploadIssueFailure = (payload: UploadIssueFailurePayload) : UploadIssueFailureAction => ({
+  type: constants.UPLOAD_ISSUE_FAILURE,
   payload
 })
 //}}}

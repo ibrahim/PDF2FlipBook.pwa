@@ -6,6 +6,7 @@ import {
   getIssueFlow, 
   newIssueFlow,
   updateIssueFlow,
+  uploadIssueFlow,
   getIssuesFlow 
 } from '../modules/app/saga'
 
@@ -19,5 +20,6 @@ export function* rootSaga() {
     fork(getIssueFlow),
     fork(newIssueFlow),
     fork(updateIssueFlow),
+    fork(uploadIssueFlow),
   ])
 }

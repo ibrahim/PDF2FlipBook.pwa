@@ -7,12 +7,14 @@ import {
   GetIssueRequestAction,
   NewIssueRequestAction,
   UpdateIssueRequestAction,
+  UploadIssueRequestAction,
   GetIssuesRequestAction,
   GetPublicationRequestPayload, 
   GetPublicationsRequestPayload, 
   GetIssueRequestPayload, 
   NewIssueRequestPayload, 
   UpdateIssueRequestPayload, 
+  UploadIssueRequestPayload, 
   GetIssuesRequestPayload, 
   IIssue,
 }  from './types'
@@ -27,6 +29,8 @@ import {
   newIssueFailure,
   updateIssueSuccess,
   updateIssueFailure,
+  uploadIssueSuccess,
+  uploadIssueFailure,
   getIssuesSuccess,
   getIssuesFailure,
 } from './actions'
@@ -104,7 +108,8 @@ export function* getIssue(payload: GetIssueRequestPayload) {
   try {
     const authToken : string = yield select( (state : AppState ) => state.login.token)
     const issue = yield call(Api.getIssue, payload, authToken)
-    yield put(getIssueSuccess({ issue }))
+    const publication_id = payload.publication_id
+    yield put(getIssueSuccess({ issue, publication_id }))
     return issue
   } catch(error) {
     if(error.response.status === 400){
@@ -177,6 +182,15 @@ export function* updateIssue(payload: UpdateIssueRequestPayload) {
     if (yield cancelled()) {
       // ... put special cancellation handling code here
     }
+  }
+}
+//}}}
+
+//{{{ uploadIssueFlow
+export function* uploadIssueFlow() {
+  while (true) {
+    const { payload } : UploadIssueRequestAction = yield take(constants.UPLOAD_ISSUE_REQUEST)
+    yield call(Api.uploadIssue, payload)
   }
 }
 //}}}

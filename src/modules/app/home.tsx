@@ -6,10 +6,8 @@ import styled from "styled-components";
 import { AppState } from "../../store";
 import Login from '../login/login'
 import Publications from './publications'
-import Issues from './issues/issues'
+import Issues from './issues'
 import CreatePublication from './publications/create-form'
-import CreateIssue from './issues/create'
-import EditIssue from './issues/edit'
 import NavBar from './nav-bar'
 
 interface FormState {
@@ -37,9 +35,10 @@ const Home = (props: Props) => {
           <Switch>
             <Route path="/app/publications/new" exact render={ (props: RouteComponentProps) => <CreatePublication {...props}/> } />
             <Route path="/app/publications" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
-            <Route path="/app/publications/:publication_id/new" exact render={ (props: RouteComponentProps) => <CreateIssue {...props} /> } />
-            <Route path="/app/publications/:publication_id/issues/:id" exact render={ (props: RouteComponentProps) => <EditIssue {...props} /> } />
-            <Route path="/app/publications/:publication_id" exact render={ (props: RouteComponentProps) => <Issues {...props} /> } />
+            <Route path="/app/publications/:publication_id/new" exact render={ (props: RouteComponentProps) => <Issues.Create {...props} /> } />
+            <Route path="/app/publications/:publication_id/issues/:id/edit" exact render={ (props: RouteComponentProps) => <Issues.Edit {...props} /> } />
+            <Route path="/app/publications/:publication_id/issues/:id" exact render={ (props: RouteComponentProps) => <Issues.Show {...props} /> } />
+            <Route path="/app/publications/:publication_id" exact render={ (props: RouteComponentProps) => <Issues.List {...props} /> } />
             <Route path="/app" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />
           </Switch>
         </Box>

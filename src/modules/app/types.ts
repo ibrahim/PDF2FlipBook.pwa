@@ -22,15 +22,21 @@ export interface IIssue {
   date_day: number;
   date_month: number;
   date_year: number;
+  files: IIssueFile[]
+  file_uuid?: string;
   pages?: IPage[];
+}
+export interface IIssueFile {
+  issue_id: string;
+  publication_id: string;
+  filename: string;
+  uuid: string;
 }
 export interface IIssueForm {
   date_day: number;
   date_month: number;
   date_year: number;
 }
-
-
 export interface IPage {
   url: string;
 }
@@ -181,6 +187,29 @@ export interface UploadIssueSuccessAction {
   payload: UploadIssueSuccessPayload;
 }
 //}}}
+//{{{ Process Issue Actions
+export type ProcessIssueRequestPayload = { 
+  id: string, 
+  publication_id : string
+}
+export type ProcessIssueSuccessPayload = { issue : IIssue, publication_id : string }
+export type ProcessIssueFailurePayload = { errors: string[] }
+
+export interface ProcessIssueRequestAction {
+  type: typeof constants.PROCESS_ISSUE_REQUEST;
+  payload: ProcessIssueRequestPayload;
+}
+
+export interface ProcessIssueFailureAction {
+  type: typeof constants.PROCESS_ISSUE_FAILURE;
+  payload: ProcessIssueFailurePayload;
+}
+
+export interface ProcessIssueSuccessAction {
+  type: typeof constants.PROCESS_ISSUE_SUCCESS;
+  payload: ProcessIssueSuccessPayload;
+}
+//}}}
 
 export type AppAction = 
   | GetPublicationRequestAction
@@ -204,6 +233,9 @@ export type AppAction =
   | UploadIssueRequestAction
   | UploadIssueSuccessAction
   | UploadIssueFailureAction
+  | ProcessIssueRequestAction
+  | ProcessIssueSuccessAction
+  | ProcessIssueFailureAction
 
 
 export type ActionPayload = 
@@ -228,4 +260,7 @@ export type ActionPayload =
   | UploadIssueRequestPayload 
   | UploadIssueFailurePayload
   | UploadIssueSuccessPayload
+  | ProcessIssueRequestPayload 
+  | ProcessIssueFailurePayload
+  | ProcessIssueSuccessPayload
 

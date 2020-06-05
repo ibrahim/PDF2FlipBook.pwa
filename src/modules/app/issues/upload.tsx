@@ -1,6 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux' 
-import { Box } from 'grommet' 
+import { withRouter, RouteComponentProps} from 'react-router-dom'
+import { Box, Button } from 'grommet' 
+import { FiUpload } from 'react-icons/fi'
 import styled from 'styled-components'
 import { uploadIssueRequest } from '../actions'
 
@@ -9,18 +11,16 @@ interface ComponentProps {
   publication_id: string  | null ;
 }
 
-type Props = ComponentProps
+type Props = ComponentProps & RouteComponentProps
   
 const Upload = (props: Props) => {
-  const { issue_id, publication_id } = props
+  const { issue_id, publication_id, history } = props
   const dispatch = useDispatch()
 
   const [is_uploading, setUploading] = React.useState(false)
 
-  const callback = (progressEvent: { loaded: number; total: number}) : void => {
-    const percentCompleted = Math.round( (progressEvent.loaded * 100) / progressEvent.total );
-    console.log({percentCompleted})
-  }
+  const callback = () => history.push(`/app/publications/${ publication_id }/issues/${issue_id}`)
+
   const handleUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("handleUpload")
 		event.persist();
@@ -40,11 +40,23 @@ const Upload = (props: Props) => {
 
   return(
     <Container>
+      <Button plain color="brand" icon={ <FiUpload className="upload"/>} label="Upload PDF" />
       <input type="file" onChange={ handleUpload } accept="application/pdf"/>
     </Container>
   )
 }
-const Container = styled(Box)`
 
+const Container = styled(Box)`
+  position: relative;
+  .upload {
+    font-size:20px;
+  }
+  input[type=file] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+  }
 `
-export default Upload;
+export default withRouter(Upload);

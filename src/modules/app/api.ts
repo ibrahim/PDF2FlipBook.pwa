@@ -6,6 +6,7 @@ import {
   GetPublicationRequestPayload,
   GetPublicationsRequestPayload,
   GetIssueRequestPayload,
+  ProcessIssueRequestPayload,
   NewIssueRequestPayload,
   UpdateIssueRequestPayload,
   GetIssuesRequestPayload,
@@ -47,6 +48,14 @@ export const getIssue = (payload: GetIssueRequestPayload, authToken : string) =>
     .then((response) => response.data)
 }
 //}}}
+//{{{ processIssue
+export const processIssue = (payload: ProcessIssueRequestPayload, authToken : string) => {
+  axios.defaults.headers.common = { Authorization: `${authToken}` };
+  return axios
+    .post(`${API_URL}/publications/${payload.publication_id}/issues/${payload.id}/process`)
+    .then((response) => response.data)
+}
+//}}}
 //{{{ getIssues
 export const getIssues = (payload: GetIssuesRequestPayload, authToken : string) => {
   axios.defaults.headers.common = { Authorization: `${authToken}` };
@@ -66,7 +75,7 @@ export const uploadIssue = (payload : UploadIssueRequestPayload) => {
       filename
     }
   }
-  const toastId = toast('Uploading file. please wait...', { 
+  const toastId = toast('Uploading file. Please wait...', { 
     progress: 0,
     hideProgressBar: false,
     autoClose: false,

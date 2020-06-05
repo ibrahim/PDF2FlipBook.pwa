@@ -8,6 +8,7 @@ import {
   NewIssueRequestAction,
   UpdateIssueRequestAction,
   UploadIssueRequestAction,
+  ProcessIssueRequestAction,
   GetIssuesRequestAction,
   GetPublicationRequestPayload, 
   GetPublicationsRequestPayload, 
@@ -15,6 +16,7 @@ import {
   NewIssueRequestPayload, 
   UpdateIssueRequestPayload, 
   UploadIssueRequestPayload, 
+  ProcessIssueRequestPayload, 
   GetIssuesRequestPayload, 
   IIssue,
 }  from './types'
@@ -29,8 +31,8 @@ import {
   newIssueFailure,
   updateIssueSuccess,
   updateIssueFailure,
-  uploadIssueSuccess,
-  uploadIssueFailure,
+  processIssueSuccess,
+  processIssueFailure,
   getIssuesSuccess,
   getIssuesFailure,
 } from './actions'
@@ -176,6 +178,37 @@ export function* updateIssue(payload: UpdateIssueRequestPayload) {
     if(error.response.status === 400){
       const errors = error.response.data
       yield put(updateIssueFailure({ errors }))
+    }
+    console.log({errors: error.response.data})
+  } finally {
+    if (yield cancelled()) {
+      // ... put special cancellation handling code here
+    }
+  }
+}
+//}}}
+
+//{{{ processIssueFlow
+export function* processIssueFlow() {
+  while (true) {
+    const { payload } : ProcessIssueRequestAction = yield take(constants.PROCESS_ISSUE_REQUEST)
+    yield fork(processIssue, payload as ProcessIssueRequestPayload)
+  }
+}
+//}}}
+//{{{ processIssue
+export function* processIssue(payload: ProcessIssueRequestPayload) {
+  console.log("processIssue Saga")
+  try {
+    const authToken : string = yield select( (state : AppState ) => state.login.token)
+    const { issue, message } : { issue: IIssue, message: string} = yield call(Api.processIssue, payload, authToken)
+    toast.success(message)
+    yield put(processIssueSuccess({ issue, publication_id: payload.publication_id }))
+    return issue
+  } catch(error) {
+    if(error.response.status === 400){
+      const errors = error.response.data
+      yield put(processIssueFailure({ errors }))
     }
     console.log({errors: error.response.data})
   } finally {

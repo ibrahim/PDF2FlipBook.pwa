@@ -36,20 +36,15 @@ const EditIssue = (props: Props) => {
   const [value, setValue] = React.useState<IIssue|null>();
   const [validationResult, setValidationResult] = React.useState<Joi.ValidationResult | null>(null);
   
-  const [gotIssue, setGotIssue] = React.useState<IIssue|null>()
   
   React.useEffect(() => {
-    if(!gotIssue) dispatch(getIssueRequest({id, publication_id}))
-  },[gotIssue])
+    if(!issue) dispatch(getIssueRequest({id, publication_id}))
+    if(issue) setValue(issue)
+  },[issue])
 
   React.useEffect(() => {
     if(!publication) dispatch(getPublicationsRequest({id, publication_id}))
   },[publication])
-
-  React.useEffect(() => {
-    if(!issue) dispatch(getIssuesRequest({publication_id}))
-    if(issue) setValue(issue)
-  },[issue])
 
   const has_validation_errors = (v: Joi.ValidationResult) => {
     if(v && v.error){ return true }
@@ -63,11 +58,13 @@ const EditIssue = (props: Props) => {
     if(!(err && err.context && err.message)) return false;
     if(err.context.key === field) return err.message.replace("_"," ");
   }
-  console.log({issue})
-  console.log({gotIssue})
   return (
-    <Box direction="column" fill className="edit-issue" align="center" alignContent="start">
-      <Breadcrumb issue={issue} publication={publication} />
+    <Container direction="column" pad="large" fill className="edit-issue" align="center" alignContent="start">
+      <Box className="bar" pad="medium" direction="row" alignContent="between" align="center" fill>
+        <Box fill>
+          <Breadcrumb issue={issue} publication={publication} />
+        </Box>
+      </Box>
       <Form
         value={ value || {} }
         onChange={(nextValue: any) => { console.log({value}); setValue(nextValue) }}
@@ -126,17 +123,20 @@ const EditIssue = (props: Props) => {
               name="date_year" />
           </FormField>
         </Field>
-        <Field>
-          <Upload issue_id={ id } publication_id={ publication_id }/>
-        </Field>
         <Box direction="column" gap="small" align="center">
           <Button type="submit" color="focus" primary label="Save Changes" fill />
           <Link to={`/app/publications/${ publication_id}`}>Cancel</Link>
         </Box>
       </Form>
-    </Box>
+    </Container>
   );
 };
+export const Container = styled(Box)`
+  .bar {
+    border:1px solid #ccc;
+    border-radius: 10px;
+  }
+`;
 
 export const Field = styled.div`
   margin: 30px 0px;

@@ -13,6 +13,7 @@ import {
   IPublication,
   IPublications,
   GetIssueSuccessAction,
+  ProcessIssueSuccessAction,
 } from './types'
 
 const initialState: AppReducerState = {
@@ -78,6 +79,20 @@ export const AppReducer: Reducer<AppReducerState,AppAction> = (state: AppReducer
     case constants.UPDATE_ISSUE_SUCCESS:{
       const publication_id = (action as UpdateIssueSuccessAction).payload.publication_id
       const issue : IIssue = (action as UpdateIssueSuccessAction).payload.issue
+      // const issues : IPublicationIssues = state.issues[publication_id]
+      return produce(state, (draft) => {
+        try {
+        draft.issues[publication_id][issue.id] = issue
+        }catch(err){
+          console.log({err})
+        }
+      })
+    }
+      //}}}
+      //{{{PROCESS_ISSUE_SUCCESS
+    case constants.PROCESS_ISSUE_SUCCESS:{
+      const publication_id = (action as ProcessIssueSuccessAction).payload.publication_id
+      const issue : IIssue = (action as ProcessIssueSuccessAction).payload.issue
       // const issues : IPublicationIssues = state.issues[publication_id]
       return produce(state, (draft) => {
         try {

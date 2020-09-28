@@ -31,7 +31,7 @@ const Home = (props: Props) => {
   return (
       <Box direction="column" basis="full" fill>
         <NavBar/>
-        <Box>
+        <Box fill>
           <Switch>
             <Route path="/app/publications/new" exact render={ (props: RouteComponentProps) => <CreatePublication {...props}/> } />
             <Route path="/app/publications" exact render={ (props: RouteComponentProps) => <Publications {...props}/> } />

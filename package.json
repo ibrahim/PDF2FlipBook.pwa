@@ -22,12 +22,15 @@
     "firebase": "^7.14.5",
     "grommet": "^2.13.0",
     "immer": "^6.0.9",
+    "jquery": "1.12.0",
     "localforage": "^1.7.3",
     "lodash": "^4.17.15",
     "polished": "^3.6.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-flip-page": "^1.6.2",
     "react-icons": "^3.10.0",
+    "react-imageslides": "^2.1.0",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
@@ -39,7 +42,10 @@
     "reselect": "^4.0.0",
     "semver": "^7.3.2",
     "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "turn.js": "https://github.com/rizalibnu/turn.js.git",
+    "typescript": "~3.7.2",
+    "use-double-tap": "^1.3.0",
+    "uuidv4": "^6.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

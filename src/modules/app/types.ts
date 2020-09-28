@@ -25,6 +25,7 @@ export interface IIssue {
   files: IIssueFile[]
   file_uuid?: string;
   pages?: IPage[];
+  pages_count?: string;
 }
 export interface IIssueFile {
   issue_id: string;

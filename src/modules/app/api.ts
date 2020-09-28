@@ -2,6 +2,7 @@ import axios from 'axios'
 import * as firebase from 'firebase/app'
 import "firebase/storage";
 import { toast } from 'react-toastify'
+import { uuid } from 'uuidv4'
 import { 
   GetPublicationRequestPayload,
   GetPublicationsRequestPayload,
@@ -68,42 +69,44 @@ export const uploadIssue = (payload : UploadIssueRequestPayload) => {
   const filename = file.name
   const filepath = `/files/publications/${ publication_id }/issues/${ issue_id }/${ filename }`
   const storage = firebase.storage().ref(filepath);
+  const file_uuid = uuid()
   const metadata = {
+    contentType: 'application/pdf',
     customMetadata: {
       issue_id,
       publication_id,
-      filename
+      filename,
+      uuid: file_uuid
     }
   }
-  const toastId = toast('Uploading file. Please wait...', { 
-    progress: 0,
-    hideProgressBar: false,
-    autoClose: false,
-    closeOnClick: false,
-    pauseOnHover: false,
-    draggable: false,
+
+  const toastId = `upload_toast_${payload.issue_id}`
+  return new Promise((resolve, reject) => {
+    toast.info('Uploading file. Please wait...', { 
+      toastId,
+      progress: 0,
+      hideProgressBar: false,
+      autoClose: false,
+      closeOnClick: false,
+      pauseOnHover: false,
+      draggable: false,
+    })
+    const upload = storage.put(file, metadata);
+    upload.on( "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) ;
+        toast.update(toastId, { progress })
+      },
+      () => {
+        console.log("error uploading file");
+        reject()
+      },
+      () => {
+        console.log("Upload complete")
+        resolve()
+      }
+    );
   })
-  const upload = storage.put(file, metadata);
-  upload.on( "state_changed",
-    (snapshot) => {
-      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) ;
-      if(toastId) toast.update(toastId, { progress })
-    },
-    () => {
-      console.log("error uploading file");
-      toast.update(toastId, { 
-        render: "Error! cannot upload file.",
-        hideProgressBar: true
-      })
-    },
-    () => {
-      console.log("Upload complete")
-      toast.update(toastId, { 
-        render: "Upload complete!",
-        hideProgressBar: true
-      })
-    }
-  );
 }
 //}}}
 //{{{ uploadExample

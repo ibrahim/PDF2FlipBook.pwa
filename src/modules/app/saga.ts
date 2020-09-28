@@ -25,6 +25,7 @@ import {
   getPublicationFailure,
   getPublicationsSuccess, 
   getPublicationsFailure,
+  getIssueRequest,
   getIssueSuccess,
   getIssueFailure,
   newIssueSuccess,
@@ -206,11 +207,9 @@ export function* processIssue(payload: ProcessIssueRequestPayload) {
     yield put(processIssueSuccess({ issue, publication_id: payload.publication_id }))
     return issue
   } catch(error) {
-    if(error.response.status === 400){
-      const errors = error.response.data
-      yield put(processIssueFailure({ errors }))
-    }
-    console.log({errors: error.response.data})
+    const errors = error.response.data
+    console.log(errors)
+    toast.error("Error: PDF file processing ")
   } finally {
     if (yield cancelled()) {
       // ... put special cancellation handling code here
@@ -223,7 +222,22 @@ export function* processIssue(payload: ProcessIssueRequestPayload) {
 export function* uploadIssueFlow() {
   while (true) {
     const { payload } : UploadIssueRequestAction = yield take(constants.UPLOAD_ISSUE_REQUEST)
-    yield call(Api.uploadIssue, payload)
+    const toastId = `upload_toast_${payload.issue_id}`
+    const { issue_id, publication_id } = payload
+    try {
+      yield call(Api.uploadIssue, payload)
+      toast.update(toastId, { 
+        render: "Upload complete!",
+        hideProgressBar: true
+      })
+      yield put(getIssueRequest({ id: issue_id, publication_id}))
+    }catch(err){
+      toast.update(toastId, { 
+        render: "Error! cannot upload file.",
+        hideProgressBar: true
+      })
+      
+    }
   }
 }
 //}}}
